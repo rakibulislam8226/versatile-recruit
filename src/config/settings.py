@@ -43,12 +43,22 @@ DEFAULT_APPS = [
 ]
 
 CUSTOM_INSTALL_APPS = [
+    'rest_framework',
+    'drf_yasg',
+
+    # apps
     'account',
 
 ]
 
 
 INSTALLED_APPS = list(DEFAULT_APPS) + [app for app in CUSTOM_INSTALL_APPS if app not in DEFAULT_APPS]
+
+AUTHENTICATION_BACKENDS = [
+    'account.backends.UserRoleBackend',
+    'django.contrib.auth.backends.ModelBackend',  # Keep the ModelBackend as a fallback
+]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
