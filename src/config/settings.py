@@ -46,6 +46,7 @@ CUSTOM_INSTALL_APPS = [
     'rest_framework',
     'drf_yasg',
     'rest_framework.authtoken',
+    'django_q',
 
     # apps
     'account',
@@ -190,3 +191,20 @@ EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
 EMAIL_HOST_USER = '98b44e68cbff51'
 EMAIL_HOST_PASSWORD = '707d7eb2742181'
 EMAIL_PORT = '2525'
+
+Q_CLUSTER = {
+    'name': 'Versatile_recruit',
+    'workers': 2,
+    'recycle': 500,
+    'timeout': 60,
+    'compress': True,
+    'save_limit': 0,
+    'queue_limit': 500,
+    'cpu_affinity': 1,
+    'label': 'Django Q',
+    'redis': {
+        'host': '127.0.0.1',
+        'port': 6379,
+        'db': 0,
+    }
+}

@@ -1,12 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.tokens import default_token_generator
+from django_q.tasks import async_task
 from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes
-from django.core.mail import EmailMessage
-from django.urls import reverse
 import secrets
 
 
@@ -45,31 +40,8 @@ class CustomUser(AbstractUser):
         self.activation_token = secrets.token_urlsafe(32)
         self.save()
 
-    def send_activation_email(self, request):
-        current_site = get_current_site(request)
-        token_generator = default_token_generator
-        
-        # Generate the activation token
-        token = token_generator.make_token(self)
-        
-        # Generate the uidb64 for the user's primary key
-        uidb64 = urlsafe_base64_encode(force_bytes(self.pk))
-        
-        # Construct the activation link
-        activation_url = reverse('activate', kwargs={'uidb64': uidb64, 'token': token})
-        activation_link = f"http://{current_site.domain}{activation_url}"
-        
-        mail_subject = 'Activate your account'
-        message = render_to_string(
-            'activation_email.html',
-            {
-                'user': self,
-                'activation_link': activation_link,
-            }
-        )
-        email = EmailMessage(mail_subject, message, to=[self.email])
-        email.send()
-
+    def send_activation_email(self, domain):
+        async_task('account.tasks.send_activation_email_async', self.id, domain)
 
 
     def save(self, *args, **kwargs):

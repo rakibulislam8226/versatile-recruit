@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
-
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
@@ -26,15 +26,15 @@ from .models import CustomUser
 #         hashed_password = make_password(password)  # Hash the password
 #         validated_data['password'] = hashed_password
 #         user = serializer.save()
-#         refresh = RefreshToken.for_user(user)
-#         token = {
-#             'refresh': str(refresh),
-#             'access': str(refresh.access_token),
-#         }
-#         response_data = {
-#             'user': serializer.data,
-#             'token': token
-#         }
+        # refresh = RefreshToken.for_user(user)
+        # token = {
+        #     'refresh': str(refresh),
+        #     'access': str(refresh.access_token),
+        # }
+        # response_data = {
+        #     'user': serializer.data,
+        #     'token': token
+        # }
 #         return Response(response_data, status=status.HTTP_201_CREATED)
 #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -49,16 +49,21 @@ def register_user(request):
         validated_data['password'] = hashed_password
         user = serializer.save()
         
-        # Generate activation token and send activation email
+        # Generate activation token and send activation email asynchronously
         user.generate_activation_token()
-        user.send_activation_email(request)
-
+        user.send_activation_email(request.get_host())  # Pass the domain from the request
+        
+        refresh = RefreshToken.for_user(user)
+        token = {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }
         response_data = {
-            'message': 'User registered successfully. Please check your email for activation.',
+            'user': serializer.data,
+            'token': token
         }
         return Response(response_data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  # Specify the renderer class
-
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginAPI(APIView):
