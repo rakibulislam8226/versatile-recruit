@@ -61,20 +61,14 @@ AUTHENTICATION_BACKENDS = [
     'account.backends.UserRoleBackend',
     'django.contrib.auth.backends.ModelBackend',  # Keep the ModelBackend as a fallback
 ]
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
-}
-# REST_FRAMEWORK = {
-#     'DEFAULT_SCHEMA_CLASS': 'drf_yasg.inspectors.SwaggerAutoSchema',
-#     # ...
-# }
+
 # REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': [
 #         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#         'rest_framework.authentication.TokenAuthentication',
 #         # Other authentication classes
 #     ],
+#     'DEFAULT_SCHEMA_CLASS': 'drf_yasg.inspectors.SwaggerAutoSchema',
 # }
 
 # SIMPLE_JWT = {
@@ -175,3 +169,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 
+APP_SITE_HEADER = os.environ.get('APP_SITE_HEADER', 'Versatile Ltd')
+APP_SITE_TITLE = os.environ.get('APP_SITE_TITLE', 'Versatile Admin')
+APP_INDEX_TITLE = os.environ.get('APP_INDEX_TITLE', 'Welcome to Versatile Admin')
