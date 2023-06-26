@@ -1,11 +1,13 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, renderer_classes
 from drf_yasg.utils import swagger_auto_schema
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.tokens import RefreshToken
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.renderers import JSONRenderer
+
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
@@ -13,9 +15,31 @@ from .serializers import CustomUserSerializer, LoginSerializer
 from .models import CustomUser
 
 
-@swagger_auto_schema(method='post', request_body=CustomUserSerializer)
+# @swagger_auto_schema(method='post', request_body=CustomUserSerializer)
+# @api_view(['POST'])
+# # @permission_classes([IsAuthenticated])
+# def register_user(request):
+#     serializer = CustomUserSerializer(data=request.data)
+#     if serializer.is_valid():
+#         validated_data = serializer.validated_data
+#         password = validated_data['password']
+#         hashed_password = make_password(password)  # Hash the password
+#         validated_data['password'] = hashed_password
+#         user = serializer.save()
+#         refresh = RefreshToken.for_user(user)
+#         token = {
+#             'refresh': str(refresh),
+#             'access': str(refresh.access_token),
+#         }
+#         response_data = {
+#             'user': serializer.data,
+#             'token': token
+#         }
+#         return Response(response_data, status=status.HTTP_201_CREATED)
+#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@csrf_exempt
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
 def register_user(request):
     serializer = CustomUserSerializer(data=request.data)
     if serializer.is_valid():
@@ -24,17 +48,17 @@ def register_user(request):
         hashed_password = make_password(password)  # Hash the password
         validated_data['password'] = hashed_password
         user = serializer.save()
-        refresh = RefreshToken.for_user(user)
-        token = {
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-        }
+        
+        # Generate activation token and send activation email
+        user.generate_activation_token()
+        user.send_activation_email(request)
+
         response_data = {
-            'user': serializer.data,
-            'token': token
+            'message': 'User registered successfully. Please check your email for activation.',
         }
         return Response(response_data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  # Specify the renderer class
+
 
 
 class LoginAPI(APIView):

@@ -58,9 +58,17 @@ INSTALLED_APPS = list(DEFAULT_APPS) + [app for app in CUSTOM_INSTALL_APPS if app
 AUTH_USER_MODEL = 'account.CustomUser'
 
 AUTHENTICATION_BACKENDS = [
-    'account.backends.UserRoleBackend',
+    # 'account.backends.UserRoleBackend',
+    'account.backends.CustomUserBackend',
     'django.contrib.auth.backends.ModelBackend',  # Keep the ModelBackend as a fallback
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ]
+}
+
 
 # REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -174,3 +182,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 APP_SITE_HEADER = os.environ.get('APP_SITE_HEADER', 'Versatile Ltd')
 APP_SITE_TITLE = os.environ.get('APP_SITE_TITLE', 'Versatile Admin')
 APP_INDEX_TITLE = os.environ.get('APP_INDEX_TITLE', 'Welcome to Versatile Admin')
+
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_USE_TLS = True
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = '98b44e68cbff51'
+EMAIL_HOST_PASSWORD = '707d7eb2742181'
+EMAIL_PORT = '2525'
