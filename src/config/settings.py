@@ -43,6 +43,7 @@ DEFAULT_APPS = [
 ]
 
 CUSTOM_INSTALL_APPS = [
+    'account',
 
 ]
 
