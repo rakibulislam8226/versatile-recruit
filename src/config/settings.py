@@ -45,6 +45,7 @@ DEFAULT_APPS = [
 CUSTOM_INSTALL_APPS = [
     'rest_framework',
     'drf_yasg',
+    'rest_framework.authtoken',
 
     # apps
     'account',
@@ -54,10 +55,31 @@ CUSTOM_INSTALL_APPS = [
 
 INSTALLED_APPS = list(DEFAULT_APPS) + [app for app in CUSTOM_INSTALL_APPS if app not in DEFAULT_APPS]
 
+AUTH_USER_MODEL = 'account.CustomUser'
+
 AUTHENTICATION_BACKENDS = [
     'account.backends.UserRoleBackend',
     'django.contrib.auth.backends.ModelBackend',  # Keep the ModelBackend as a fallback
 ]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
+# REST_FRAMEWORK = {
+#     'DEFAULT_SCHEMA_CLASS': 'drf_yasg.inspectors.SwaggerAutoSchema',
+#     # ...
+# }
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#         # Other authentication classes
+#     ],
+# }
+
+# SIMPLE_JWT = {
+#     'AUTH_HEADER_TYPES': ('Bearer',),
+# }
 
 
 MIDDLEWARE = [
