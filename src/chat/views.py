@@ -1,5 +1,5 @@
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import viewsets
+from rest_framework import viewsets, views, response, status
 from .models import Room, Message
 from .serializers import RoomSerializer, MessageSerializer
 
@@ -15,3 +15,13 @@ class MessageViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(sender=self.request.user)
+
+
+class PersonalMessageViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        messages = Message.objects.filter(receiver=request.user)
+        serializer = MessageSerializer(messages, many=True)
+        return response.Response(serializer.data, status=status.HTTP_200_OK)
+    

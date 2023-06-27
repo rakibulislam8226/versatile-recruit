@@ -81,9 +81,13 @@ REST_FRAMEWORK = {
     # 'DEFAULT_SCHEMA_CLASS': 'drf_yasg.inspectors.SwaggerAutoSchema',
 }
 
-# SIMPLE_JWT = {
-#     'AUTH_HEADER_TYPES': ('Bearer',),
-# }
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=50),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    # 'AUTH_HEADER_TYPES': ('Bearer',),
+}
 
 
 MIDDLEWARE = [
