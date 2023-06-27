@@ -50,6 +50,7 @@ CUSTOM_INSTALL_APPS = [
 
     # apps
     'account',
+    'chat',
 
 ]
 
@@ -71,14 +72,14 @@ REST_FRAMEWORK = {
 }
 
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework_simplejwt.authentication.JWTAuthentication',
-#         'rest_framework.authentication.TokenAuthentication',
-#         # Other authentication classes
-#     ],
-#     'DEFAULT_SCHEMA_CLASS': 'drf_yasg.inspectors.SwaggerAutoSchema',
-# }
+#FIXME: During pass the JWT token then only postman working but during don't pass the JWT then swagger working but postman not working.
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
+    ],
+    # 'DEFAULT_SCHEMA_CLASS': 'drf_yasg.inspectors.SwaggerAutoSchema',
+}
 
 # SIMPLE_JWT = {
 #     'AUTH_HEADER_TYPES': ('Bearer',),
