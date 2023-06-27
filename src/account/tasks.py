@@ -1,12 +1,9 @@
-from django.core.mail import EmailMultiAlternatives, EmailMessage
-from django_q.tasks import async_task
+from django.core.mail import EmailMessage
 from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.contrib.sites.shortcuts import get_current_site
-from django.conf import settings
 from .models import CustomUser
 
 
@@ -35,4 +32,6 @@ def send_activation_email_async(user_id, domain):
         }
     )
     email = EmailMessage(mail_subject, message, to=[user.email])
+    email.content_subtype = 'html'
+    print(f'Activation mail send to {user.email}')
     email.send()

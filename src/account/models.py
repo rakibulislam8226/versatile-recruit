@@ -1,21 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django_q.tasks import async_task
-from django.contrib.sites.shortcuts import get_current_site
+from .choices import ROLE_CHOICES
 import secrets
 
 
 
 class CustomUser(AbstractUser):
-    ROLE_CHOICES = (
-        ('company', 'Comapany'),
-        ('employee', 'Employee'),
-        # ('admin', 'Admin'),
-    )
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     email = models.EmailField(max_length=100, unique=True)
     phone = models.CharField(max_length=15)
-    website = models.URLField(blank=True, null=True)
+    website = models.URLField(blank=True, null=True) # TODO: use it only for company
     is_active = models.BooleanField(default=False)
     # Add unique related_name for groups field
     groups = models.ManyToManyField(
