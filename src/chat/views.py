@@ -8,6 +8,7 @@ class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
 
+
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
@@ -24,4 +25,3 @@ class PersonalMessageViewSet(viewsets.ViewSet):
         messages = Message.objects.filter(receiver=request.user)
         serializer = MessageSerializer(messages, many=True)
         return response.Response(serializer.data, status=status.HTTP_200_OK)
-    

@@ -6,26 +6,29 @@ from drf_yasg import openapi
 from django.conf import settings
 
 schema_view = get_schema_view(
-   openapi.Info(
-      title="Versatile Interview API",
-      default_version='v1',
-      description="Versatile Interview description",
-      terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="contact@snippets.local"),
-      license=openapi.License(name="Versatile Interview License"),
-   ),
-   public=True,
-   permission_classes=(permissions.AllowAny,),
+    openapi.Info(
+        title="Versatile Interview API",
+        default_version="v1",
+        description="Versatile Interview description",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="contact@snippets.local"),
+        license=openapi.License(name="Versatile Interview License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
 )
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('auth/', include('account.urls')),
-    path('', include('chat.urls')),
-
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('api-auth/', include('rest_framework.urls')),
+    path("admin/", admin.site.urls),
+    path("auth/", include("account.urls")),
+    path("", include("chat.urls")),
+    path(
+        "swagger/",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    path("api-auth/", include("rest_framework.urls")),
 ]
 
 admin.site.site_header = settings.APP_SITE_HEADER

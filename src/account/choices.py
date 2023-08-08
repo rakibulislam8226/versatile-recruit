@@ -1,5 +1,5 @@
 ROLE_CHOICES = (
-        ('company', 'Comapany'),
-        ('employee', 'Employee'),
-        # ('admin', 'Admin'),
-    )
+    ("company", "Comapany"),
+    ("employee", "Employee"),
+    # ('admin', 'Admin'),
+)

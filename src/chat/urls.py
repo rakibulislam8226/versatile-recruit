@@ -4,10 +4,10 @@ from .views import RoomViewSet, MessageViewSet, PersonalMessageViewSet
 
 
 router = routers.DefaultRouter()
-router.register(r'rooms', RoomViewSet)
-router.register(r'messages', MessageViewSet)
-router.register(r'my-messages', PersonalMessageViewSet, basename='personal-message')
+router.register(r"rooms", RoomViewSet)
+router.register(r"messages", MessageViewSet)
+router.register(r"my-messages", PersonalMessageViewSet, basename="personal-message")
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path("", include(router.urls)),
 ]
